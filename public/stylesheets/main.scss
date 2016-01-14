@@ -1,20 +1,9 @@
 $font-stack: Helvetica, sans-serif;
-$light-grey: #eee;
-$dark-grey: #ddd;
+$black: #000;
+$lime-green: #00FF00;
 
 body {
-    margin: 0px;
-    font: 14px $font-stack;
-}
-
-.row {
-    div {
-		background-color: $light-grey;
-		border: 1px solid $dark-grey;
-		border-radius: 3px;
-    }
-}
-
-.carousel{
-	max-height: 100%;
+    font: 25px $font-stack;
+	background-color: $black;
+	color: $lime-green;
 }

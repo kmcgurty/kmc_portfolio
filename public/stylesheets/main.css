@@ -1,13 +1,6 @@
 body {
-  margin: 0px;
-  font: 14px Helvetica, sans-serif; }
-
-.row div {
-  background-color: #eee;
-  border: 1px solid #ddd;
-  border-radius: 3px; }
-
-.carousel {
-  max-height: 100%; }
+  font: 25px Helvetica, sans-serif;
+  background-color: #000;
+  color: #00FF00; }
 
 /*# sourceMappingURL=main.css.map */
