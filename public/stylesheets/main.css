@@ -1,22 +1,13 @@
-@-webkit-keyframes rotating {
-  from {
-    -webkit-transform: rotate(0deg); }
-  to {
-    -webkit-transform: rotate(360deg); } }
-
 body {
   margin: 0px;
-  font: 14px Helvetica, sans-serif;
-  overflow: hidden; }
+  font: 14px Helvetica, sans-serif; }
 
-#cat {
-  background-image: url(../images/cat.jpg);
-  max-width: 100%;
-  max-height: 100%;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  -webkit-animation: rotating 5s linear infinite; }
+.row div {
+  background-color: #eee;
+  border: 1px solid #ddd;
+  border-radius: 3px; }
+
+.carousel {
+  max-height: 100%; }
 
 /*# sourceMappingURL=main.css.map */

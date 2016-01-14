@@ -4,9 +4,8 @@ var router = express.Router();
 /* GET home page. */
 router.get('/', function(request, response, next) {
 	response.render('index', {
-		message: 'catscatscatscatscatscatscats'
+		title: 'Landing Page!'
 	});
-	console.log("serving index");
 });
 
 module.exports = router;
