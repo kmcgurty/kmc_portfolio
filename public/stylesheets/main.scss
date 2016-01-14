@@ -1,5 +1,14 @@
 $font-stack: Helvetica, sans-serif;
 
+@-webkit-keyframes rotating {
+    from{
+        -webkit-transform: rotate(0deg);
+    }
+    to{
+        -webkit-transform: rotate(360deg);
+    }
+}
+
 body {
 	margin: 0px;
 	font: 14px $font-stack;
@@ -14,4 +23,5 @@ body {
 	-moz-background-size: cover;
 	-o-background-size: cover;
 	background-size: cover;
+	-webkit-animation: rotating 5s linear infinite;
 }
