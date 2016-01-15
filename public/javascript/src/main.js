@@ -1,10 +1,12 @@
 var options = {
 	matrixLetters: ['ｦ', 'ｧ', 'ｨ', 'ｩ', 'ｪ', 'ｫ', 'ｬ', 'ｭ', 'ｮ', 'ｯ', 'ｱ', 'ｲ', 'ｳ', 'ｴ', 'ｵ', 'ｶ', 'ｷ', 'ｸ', 'ｹ', 'ｺ', 'ｻ', 'ｼ', 'ｽ', 'ｾ', 'ｿ', 'ﾀ', 'ﾁ', 'ﾂ', 'ﾃ', 'ﾄ', 'ﾅ', 'ﾆ', 'ﾇ', 'ﾈ', 'ﾉ', 'ﾊ', 'ﾋ', 'ﾌ', 'ﾍ', 'ﾎ', 'ﾏ', 'ﾐ', 'ﾑ', 'ﾒ', 'ﾓ', 'ﾔ', 'ﾕ', 'ﾖ', 'ﾗ', 'ﾘ', 'ﾙ', 'ﾚ', 'ﾛ', 'ﾜ', 'ﾝ'],
 	textSize: 25,
-	fps: 20
+	minTrailLength: 5,
+	maxTrailLength: 25,
+	fps: 30
 };
 
-var numColumns = window.innerWidth / options.textSize * 2, //multiply by two because the characters are half the normal size
+var numColumns = Math.ceil(window.innerWidth / options.textSize * 2), //multiply by two because the characters are half the normal size
 	columnData = [],
 	ctx = canvasInit();
 
@@ -15,14 +17,15 @@ for (var i = 0; i < numColumns; i++) {
 		var xPos = (columnData[i - 1].xPos + options.textSize / 2);
 	}
 
-	var yPos = -randomInt(window.innerHeight, 0);
+	var yPos = -randomInt(0, window.innerHeight);
+	//var yPos = 50;
 
 	columnData[i] = {
-		xPos: xPos,
-		yPos: yPos
+		xPos: xPos, //x position of the character train
+		yPos: yPos, //y position of the character train
+		charData: [], //character and character position
+		hasEnded: false
 	};
-
-	console.log(columnData[i].xPos)
 }
 
 setInterval(draw, 1000 / options.fps);
@@ -37,23 +40,64 @@ function canvasInit() {
 
 function draw() {
 	//fill background for fade effect
-	ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+	ctx.fillStyle = "black";
 	ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 	//fill for text
-	ctx.fillStyle = "#00FF00";
+	ctx.fillStyle = "lime";
 
 	for (var i = 0; i < columnData.length; i++) {
-		ctx.fillText(getRandomChar(), columnData[i].xPos, columnData[i].yPos);
+		if(!columnData[i].hasEnded){
+			addCharToColumn(i);
+		}
+
+		for (var j = 0; j < columnData[i].charData.length; j++) {
+			ctx.fillText(columnData[i].charData[j].character, columnData[i].xPos, columnData[i].charData[j].charPosition);
+		}
+
 		columnData[i].yPos += options.textSize;
 
-		if (columnData[i].yPos >= window.innerHeight) {
-			columnData[i].yPos = -randomInt(window.innerHeight, 0);
+		var chanceOfReset = randomInt(0, 100);
+		//20% chance of resetting if farther than half the page height
+		if (chanceOfReset < 10 && columnData[i].yPos > (window.innerHeight / 2.5) ||
+			chanceOfReset < 40 && columnData[i].yPos > (window.innerHeight / 1.5)) {
+			
+			columnData[i].hasEnded = true;
+		}
+
+		//reset a to a random distance once it reaches the bottom
+		if (columnData[i].hasEnded) {
+			var removedData = columnData[i].charData.shift() === 'undefined';
+			if(columnData[i].charData.length === 0){
+				columnData[i].hasEnded = false;
+				columnData[i].yPos = -randomInt(0, window.innerHeight);
+			}
 		}
 	}
 }
 
+
+function addCharToColumn(column, reset){
+	var character = getRandomChar(),
+		charPosition,
+		lastChar = columnData[column].charData.length - 1;
+
+	//columnData[column].charData[lastChar]
+
+	if (typeof columnData[column].charData[lastChar - 1] === 'undefined') {
+		charPosition = columnData[column].yPos;
+	} else {
+		charPosition = columnData[column].charData[lastChar].charPosition + options.textSize;
+	}
+
+	columnData[column].charData.push({
+		character: character,
+		charPosition: charPosition
+	});
+}
+
+
 function getRandomChar() {
-	return options.matrixLetters[randomInt(0, options.matrixLetters.length)]
+	return options.matrixLetters[randomInt(0, options.matrixLetters.length)];
 }
 
 function randomInt(min, max) {

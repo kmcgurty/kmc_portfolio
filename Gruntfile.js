@@ -34,7 +34,7 @@ module.exports = function(grunt) {
 		},
 
 		jshint: {
-			all: ['*.js', 'src/javascript/*.js'],
+			all: ['*.js', 'public/javascript/src/*.js'],
 			options: {
 				"esnext": true
 			}
