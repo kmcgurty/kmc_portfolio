@@ -1,6 +1,15 @@
 body {
+  margin: 0px;
   font: 25px Helvetica, sans-serif;
   background-color: #000;
-  color: #00FF00; }
+  overflow: hidden; }
+
+.matrix {
+  overflow: hidden; }
+
+#matrix-rain {
+  font-size: 25px;
+  width: 100%;
+  height: 100%; }
 
 /*# sourceMappingURL=main.css.map */

@@ -1,9 +1,21 @@
 $font-stack: Helvetica, sans-serif;
+$background-font-size: 25px;
 $black: #000;
 $lime-green: #00FF00;
 
 body {
+	margin: 0px;
     font: 25px $font-stack;
 	background-color: $black;
-	color: $lime-green;
+	overflow: hidden;
+}
+
+.matrix{
+	overflow: hidden;
+}
+
+#matrix-rain{
+	font-size: $background-font-size;
+	width: 100%;
+	height: 100%;
 }

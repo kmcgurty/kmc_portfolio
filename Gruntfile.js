@@ -4,10 +4,7 @@ module.exports = function(grunt) {
 
 		watch: {
 			grunt: {
-				files: ['Gruntfile.js'],
-				options: {
-					livereload: false
-				}
+				files: ['Gruntfile.js']
 			},
 
 			options: {
@@ -17,9 +14,14 @@ module.exports = function(grunt) {
 				}
 			},
 
+			www: {
+				files: ['bin/*', 'routes/*.js'],
+				tasks: ['express:dev']
+			},
+
 			scripts: {
-				files: ['src/javascript/*.js'],
-				tasks: ['build', 'express:dev']
+				files: ['public/javascript/src/*.js'],
+				tasks: ['build']
 			},
 
 			css: {
@@ -41,13 +43,14 @@ module.exports = function(grunt) {
 		uglify: {
 			main: {
 				options: {
+					sourceMap: true,
 					banner: '/* \n' +
 							' Source: https://github.com/kmcgurty/kmc_website \n' +
 							' Build date: <%= grunt.template.today("mm-dd-yyyy") %> \n' +
-							'*/ \n',
+							'*/ \n "use strict" \n',
 				},
 				files: {
-					'public/javascript/built.js': ['src/javascript/*.js']
+					'public/javascript/main.min.js': ['public/javascript/src/*.js']
 				}
 			}
 		},
