@@ -1,32 +1,31 @@
-//simply put, each column of text is constantly getting letters added to it. once it is randomly 
+//simply put, each column (an array of information) of text is constantly getting letters added and removed from it 
 
 var options = {
-	matrixLetters: ['ｦ', 'ｧ', 'ｨ', 'ｩ', 'ｪ', 'ｫ', 'ｬ', 'ｭ', 'ｮ', 'ｯ', 'ｱ', 'ｲ', 'ｳ', 'ｴ', 'ｵ', 'ｶ', 'ｷ', 'ｸ', 'ｹ', 'ｺ', 'ｻ', 'ｼ', 'ｽ', 'ｾ', 'ｿ', 'ﾀ', 'ﾁ', 'ﾂ', 'ﾃ', 'ﾄ', 'ﾅ', 'ﾆ', 'ﾇ', 'ﾈ', 'ﾉ', 'ﾊ', 'ﾋ', 'ﾌ', 'ﾍ', 'ﾎ', 'ﾏ', 'ﾐ', 'ﾑ', 'ﾒ', 'ﾓ', 'ﾔ', 'ﾕ', 'ﾖ', 'ﾗ', 'ﾘ', 'ﾙ', 'ﾚ', 'ﾛ', 'ﾜ', 'ﾝ'],
+	matrixLetters: ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z','0','1','2','3','4','5','6','7','8','9'],
 	textSize: 30,
 
-	fps: 25
+	fps: 20
 };
 
-var numColumns = Math.ceil(window.innerWidth / options.textSize * 2), //multiply by two because the characters are half the normal size
+var numColumns = Math.ceil(window.innerWidth / options.textSize) * 2, //multiply by two to fill the other half of the page
 	columnData = [],
 	ctx = canvasInit();
 
 for (var i = 0; i < numColumns; i++) {
+	//init the xposition of each column
 	if (typeof columnData[i - 1] === 'undefined') {
 		var xPos = 0;
 	} else {
-		var xPos = (columnData[i - 1].xPos + options.textSize / 2);
+		var xPos = (columnData[i - 1].xPos + options.textSize / 2); //divide by two since we doubled it above. this pushes the columns closer together (to be honest, I don't know why...)
 	}
 
 	//have a random starting position so they don't fall at the same time
-	//var yPos = -randomInt(0, window.innerHeight);
-
 	var yPos = randomInt(0, 200);
 
 	columnData[i] = {
 		xPos: xPos, //x position of the column
 		yPos: yPos, //y position of the last character
-		charData: [], //character and character position
+		charData: [], //character and character position. is generated later with addCharToColumn()
 		hasEnded: false
 	};
 }
@@ -37,9 +36,7 @@ function canvasInit() {
 	var ctx = document.getElementById('matrix-rain').getContext('2d', 'matrix');
 	ctx.canvas.width = window.innerWidth;
 	ctx.canvas.height = window.innerHeight;
-	ctx.font = options.textSize + "px  serif";
-	//ctx.shadowColor = "lime";
-	//ctx.shadowBlur = 20;
+	ctx.font = options.textSize + "px  matrix-font";
 	return ctx;
 }
 
@@ -51,6 +48,7 @@ function draw() {
 	ctx.fillStyle = "lime";
 
 	for (var i = 0; i < columnData.length; i++) {
+		//add a random letter to the bottom of each column if it hasn't ended yet
 		if (!columnData[i].hasEnded) {
 			addCharToColumn(i);
 		}
@@ -75,10 +73,12 @@ function draw() {
 			columnData[i].hasEnded = true;
 		}
 
-		//reset y position once the column has ended (decided randomly above)
+		//once ia column has ended, start remove the first letter
 		if (columnData[i].hasEnded) {
-			var removedData = columnData[i].charData.shift() === 'undefined';
+			columnData[i].charData.shift();
+			
 			if (columnData[i].charData.length === 0) {
+				//when the column has nothing left, reset hasEnded and reset the yPos
 				columnData[i].hasEnded = false;
 				columnData[i].yPos = randomInt(0, 200);
 			}
@@ -86,7 +86,7 @@ function draw() {
 	}
 }
 
-
+//add a character to the end of a cloumn
 function addCharToColumn(column, reset) {
 	var character = getRandomChar(),
 		charPosition,

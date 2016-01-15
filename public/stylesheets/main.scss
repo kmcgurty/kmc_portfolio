@@ -3,6 +3,11 @@ $background-font-size: 25px;
 $black: #000;
 $lime-green: #00FF00;
 
+@font-face {
+    font-family: 'matrix-font';
+    src: url('/fonts/matrix.ttf');
+}
+
 body {
 	transform: translateZ(0);
 	margin: 0px;
