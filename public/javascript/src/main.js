@@ -1,9 +1,9 @@
+//simply put, each column of text is constantly getting letters added to it. once it is randomly 
+
 var options = {
 	matrixLetters: ['ｦ', 'ｧ', 'ｨ', 'ｩ', 'ｪ', 'ｫ', 'ｬ', 'ｭ', 'ｮ', 'ｯ', 'ｱ', 'ｲ', 'ｳ', 'ｴ', 'ｵ', 'ｶ', 'ｷ', 'ｸ', 'ｹ', 'ｺ', 'ｻ', 'ｼ', 'ｽ', 'ｾ', 'ｿ', 'ﾀ', 'ﾁ', 'ﾂ', 'ﾃ', 'ﾄ', 'ﾅ', 'ﾆ', 'ﾇ', 'ﾈ', 'ﾉ', 'ﾊ', 'ﾋ', 'ﾌ', 'ﾍ', 'ﾎ', 'ﾏ', 'ﾐ', 'ﾑ', 'ﾒ', 'ﾓ', 'ﾔ', 'ﾕ', 'ﾖ', 'ﾗ', 'ﾘ', 'ﾙ', 'ﾚ', 'ﾛ', 'ﾜ', 'ﾝ'],
-	textSize: 25,
-	minTrailLength: 5,
-	maxTrailLength: 25,
-	fps: 30
+	textSize: 30,
+	fps: 25
 };
 
 var numColumns = Math.ceil(window.innerWidth / options.textSize * 2), //multiply by two because the characters are half the normal size
@@ -18,11 +18,10 @@ for (var i = 0; i < numColumns; i++) {
 	}
 
 	var yPos = -randomInt(0, window.innerHeight);
-	//var yPos = 50;
 
 	columnData[i] = {
-		xPos: xPos, //x position of the character train
-		yPos: yPos, //y position of the character train
+		xPos: xPos, //x position of the column
+		yPos: yPos, //y position of the last character
 		charData: [], //character and character position
 		hasEnded: false
 	};
@@ -35,6 +34,8 @@ function canvasInit() {
 	ctx.canvas.width = window.innerWidth;
 	ctx.canvas.height = window.innerHeight;
 	ctx.font = options.textSize + "px  serif";
+	//ctx.shadowColor = "lime";
+	//ctx.shadowBlur = 20;
 	return ctx;
 }
 
@@ -46,42 +47,46 @@ function draw() {
 	ctx.fillStyle = "lime";
 
 	for (var i = 0; i < columnData.length; i++) {
-		if(!columnData[i].hasEnded){
+		if (!columnData[i].hasEnded) {
 			addCharToColumn(i);
 		}
 
 		for (var j = 0; j < columnData[i].charData.length; j++) {
+			//color the last character white, otherwise color it green
+			if (j == columnData[i].charData.length - 1) {
+				ctx.fillStyle = "white";
+			} else {
+				ctx.fillStyle = "lime";
+			}
 			ctx.fillText(columnData[i].charData[j].character, columnData[i].xPos, columnData[i].charData[j].charPosition);
 		}
 
 		columnData[i].yPos += options.textSize;
 
 		var chanceOfReset = randomInt(0, 100);
-		//20% chance of resetting if farther than half the page height
-		if (chanceOfReset < 10 && columnData[i].yPos > (window.innerHeight / 2.5) ||
-			chanceOfReset < 40 && columnData[i].yPos > (window.innerHeight / 1.5)) {
-			
+		//% of change it has to reset once it reaches a certain distance of the page
+		if (chanceOfReset < 5 && columnData[i].yPos > (window.innerHeight / 2) ||
+			chanceOfReset < 20 && columnData[i].yPos > (window.innerHeight / 1.5)) {
+
 			columnData[i].hasEnded = true;
 		}
 
-		//reset a to a random distance once it reaches the bottom
+		//reset y position once the column has ended (decided randomly above)
 		if (columnData[i].hasEnded) {
 			var removedData = columnData[i].charData.shift() === 'undefined';
-			if(columnData[i].charData.length === 0){
+			if (columnData[i].charData.length === 0) {
 				columnData[i].hasEnded = false;
-				columnData[i].yPos = -randomInt(0, window.innerHeight);
+				columnData[i].yPos = randomInt(0, 200);
 			}
 		}
 	}
 }
 
 
-function addCharToColumn(column, reset){
+function addCharToColumn(column, reset) {
 	var character = getRandomChar(),
 		charPosition,
 		lastChar = columnData[column].charData.length - 1;
-
-	//columnData[column].charData[lastChar]
 
 	if (typeof columnData[column].charData[lastChar - 1] === 'undefined') {
 		charPosition = columnData[column].yPos;
