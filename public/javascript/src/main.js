@@ -3,6 +3,7 @@
 var options = {
 	matrixLetters: ['ｦ', 'ｧ', 'ｨ', 'ｩ', 'ｪ', 'ｫ', 'ｬ', 'ｭ', 'ｮ', 'ｯ', 'ｱ', 'ｲ', 'ｳ', 'ｴ', 'ｵ', 'ｶ', 'ｷ', 'ｸ', 'ｹ', 'ｺ', 'ｻ', 'ｼ', 'ｽ', 'ｾ', 'ｿ', 'ﾀ', 'ﾁ', 'ﾂ', 'ﾃ', 'ﾄ', 'ﾅ', 'ﾆ', 'ﾇ', 'ﾈ', 'ﾉ', 'ﾊ', 'ﾋ', 'ﾌ', 'ﾍ', 'ﾎ', 'ﾏ', 'ﾐ', 'ﾑ', 'ﾒ', 'ﾓ', 'ﾔ', 'ﾕ', 'ﾖ', 'ﾗ', 'ﾘ', 'ﾙ', 'ﾚ', 'ﾛ', 'ﾜ', 'ﾝ'],
 	textSize: 30,
+
 	fps: 25
 };
 
@@ -17,7 +18,10 @@ for (var i = 0; i < numColumns; i++) {
 		var xPos = (columnData[i - 1].xPos + options.textSize / 2);
 	}
 
-	var yPos = -randomInt(0, window.innerHeight);
+	//have a random starting position so they don't fall at the same time
+	//var yPos = -randomInt(0, window.innerHeight);
+
+	var yPos = randomInt(0, 200);
 
 	columnData[i] = {
 		xPos: xPos, //x position of the column
@@ -30,7 +34,7 @@ for (var i = 0; i < numColumns; i++) {
 setInterval(draw, 1000 / options.fps);
 
 function canvasInit() {
-	var ctx = document.getElementById('matrix-rain').getContext('2d');
+	var ctx = document.getElementById('matrix-rain').getContext('2d', 'matrix');
 	ctx.canvas.width = window.innerWidth;
 	ctx.canvas.height = window.innerHeight;
 	ctx.font = options.textSize + "px  serif";
